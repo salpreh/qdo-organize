@@ -23,38 +23,7 @@
       </q-input>
     </div>
     <q-list padding class="q-mt-md">
-      <!-- <q-item-label header>General</q-item-label> -->
-
-      <q-item
-        v-for="(task, i) in tasks"
-        :key="task.name"
-        tag="label"
-        :class="{'task-done': task.done}"
-        v-ripple
-      >
-        <q-item-section side top>
-          <q-checkbox v-model="task.done" />
-        </q-item-section>
-
-        <q-item-section>
-          <q-item-label class="task-text-done">{{task.name}}</q-item-label>
-          <q-item-label
-            v-if="task.description"
-            caption
-          >
-            {{task.description}}
-          </q-item-label>
-        </q-item-section>
-        <q-item-section side top>
-          <q-btn
-            @click="deleteTask(i)"
-            outline
-            round
-            color="negative"
-            icon="delete" />
-        </q-item-section>
-      </q-item>
-      <!-- <q-separator spaced /> -->
+      <TaskItem v-for="(task, i) in tasks" :task="task" :key="i" :taskId="i" @taskDelete="deleteTask" />
     </q-list>
 
   </q-page>
@@ -62,44 +31,48 @@
 </template>
 
 <script>
+import TaskItem from 'components/todo/TaskItem'
 export default {
-    data: () => ({
-      'taskName': '',
-      'tasks': [
-        {
-          name: 'Work on Quasar',
-          description: '',
-          done: false,
-          separate: false,
-        },
-        {
-          name: 'Clean Teeth',
-          description: '',
-          done: false,
-          separate: true,
-        },
-        {
-          name: 'Get the stuff',
-          description: '',
-          done: true,
-          separate: false,
-        },
-      ]
-    }),
-    methods: {
-      createTask() {
-        this.tasks.push({
-          name: this.taskName,
-          description: '',
-          done: false,
-          separate: false,
-        })
-        this.taskName = ''
+  components: {
+    TaskItem
+  },
+  data: () => ({
+    'taskName': '',
+    'tasks': [
+      {
+        name: 'Work on Quasar',
+        description: '',
+        done: false,
+        separate: false,
       },
-      deleteTask(taskId) {
-        this.tasks.pop(taskId)
-      }
+      {
+        name: 'Clean Teeth',
+        description: '',
+        done: false,
+        separate: true,
+      },
+      {
+        name: 'Get the stuff',
+        description: '',
+        done: true,
+        separate: false,
+      },
+    ]
+  }),
+  methods: {
+    createTask() {
+      this.tasks.push({
+        name: this.taskName,
+        description: '',
+        done: false,
+        separate: false,
+      })
+      this.taskName = ''
+    },
+    deleteTask(taskId) {
+      this.tasks.splice(taskId, 1)
     }
+  }
 }
 </script>
 
