@@ -18,6 +18,7 @@
             unelevated
             color="accent"
             icon="add"
+            :class="{'disabled': !taskName}"
           />
         </template>
       </q-input>
@@ -61,6 +62,8 @@ export default {
   }),
   methods: {
     createTask() {
+      if (!this.taskName) return
+
       this.tasks.push({
         name: this.taskName,
         description: '',
