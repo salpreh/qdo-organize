@@ -4,42 +4,16 @@
       class="q-pa-md row items-start q-gutter-md q-pr-xs-none"
       :class="$q.screen.lt.sm ? 'justify-center' : ''"
     >
-      <q-card
+      <NoteCard
         v-for="(note, idx) in notes"
-        :key="note.title"
-        flat
-        bordered
-        class="note-card col-12 col-sm-5 col-md-3 col-lg-3 q-mx-xs-xs q-mx-md-lg">
-        <q-card-section>
-          <div class="row items-center no-wrap">
-            <div class="col">
-              <div class="text-h6"> {{note.title | strMaxLen(titleMaxLen)}}</div>
-            </div>
-          </div> 
-        </q-card-section>
-
-        <q-card-section class="q-pt-none"> {{note.content | strMaxLen(contentMaxLen)}} </q-card-section>
-
-        <q-separator />
-
-        <q-card-actions class="bg-grey-1">
-          <q-btn
-            icon="edit"
-            color="primary"
-            flat
-            label="edit"
-            @click="editNote(idx)"
-          ></q-btn>
-          <q-btn
-            icon="delete"
-            color="negative"
-            flat
-            label="delete"
-            @click="deleteNote(idx)"
-          ></q-btn>
-        </q-card-actions>
-      </q-card>
+        :key="note.name"
+        :noteId="idx"
+        :note="note"
+        @edit="editNote"
+        @delete="onDeleteDialog"
+      />
     </div>
+
     <NoteEditDialog
       :show="editDialog"
       :note="editedNote"
@@ -52,18 +26,12 @@
 
 <script>
 import NoteEditDialog from 'components/notes/NoteEditDialog'
+import NoteCard from 'components/notes/NoteCard'
 
 export default {
   components: {
-    NoteEditDialog
-  },
-  props: {
-    contentMaxLen: {
-      default: 180
-    },
-    titleMaxLen: {
-      default: 28
-    }
+    NoteEditDialog,
+    NoteCard
   },
   data: () =>({
     editDialog: false,
@@ -104,6 +72,16 @@ export default {
       }
 
       this.editDialog = false
+    },
+    onDeleteDialog(noteId) {
+      this.$q.dialog({
+        title: 'Confirm',
+        message: 'Do you want to delete the note?',
+        cancel: true,
+        persistent: true,
+      }).onOk(() => {
+        this.deleteNote(noteId)
+      })
     },
     deleteNote(noteId) {
       this.notes.splice(noteId, 1)

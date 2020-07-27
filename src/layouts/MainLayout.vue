@@ -32,7 +32,7 @@
       bordered
       content-class="bg-grey-1"
     >
-      <q-list>
+      <q-list class="q-mt-sm">
         <DrawerLink
           v-for="link in essentialLinks"
           :key="link.title"
@@ -68,7 +68,7 @@ export default {
           to: '/'
         },
         {
-          title: 'Random notes',
+          title: 'Notes',
           icon: 'event_note',
           to: '/notes'
         },

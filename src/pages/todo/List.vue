@@ -24,7 +24,7 @@
       </q-input>
     </div>
     <q-list padding class="q-mt-md">
-      <TaskItem v-for="(task, i) in tasks" :task="task" :key="i" :taskId="i" @taskDelete="deleteTask" />
+      <TaskItem v-for="(task, i) in tasks" :task="task" :key="i" :taskId="i" @taskDelete="onDeleteDialog(i)" />
     </q-list>
 
   </q-page>
@@ -33,6 +33,7 @@
 
 <script>
 import TaskItem from 'components/todo/TaskItem'
+
 export default {
   components: {
     TaskItem
@@ -71,6 +72,16 @@ export default {
         separate: false,
       })
       this.taskName = ''
+    },
+    onDeleteDialog(taskId) {
+      this.$q.dialog({
+        title: 'Confirm',
+        message: 'Do you want to delete the task?',
+        cancel: true,
+        persistent: true,
+      }).onOk(() => {
+        this.deleteTask(taskId)
+      })
     },
     deleteTask(taskId) {
       this.tasks.splice(taskId, 1)
